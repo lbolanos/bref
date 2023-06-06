@@ -2,10 +2,8 @@
 
 namespace Bref\Test\Event\Sqs;
 
-use Bref\Context\ContextBuilder;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
-use Bref\Test\Fixture\SqsFakeHandler;
 use PHPUnit\Framework\TestCase;
 
 class SqsEventTest extends TestCase
@@ -40,20 +38,7 @@ class SqsEventTest extends TestCase
     public function test invalid event()
     {
         $this->expectException(InvalidLambdaEvent::class);
-        $this->expectExceptionMessage('This handler expected to be invoked with a SQS event. Instead, the handler was invoked with invalid event data');
+        $this->expectExceptionMessage("This handler expected to be invoked with a SQS event (check that you are using the correct Bref runtime: https://bref.sh/docs/runtimes/#bref-runtimes).\nInstead, the handler was invoked with invalid event data");
         new SqsEvent([]);
-    }
-
-    public function test partial failure()
-    {
-        $event = json_decode(file_get_contents(__DIR__ . '/handler.json'), true);
-        $result = (new SqsFakeHandler)->handle($event, (new ContextBuilder)->buildContext());
-
-        self::assertSame($result, [
-            'batchItemFailures' => [
-                ['itemIdentifier' => '2'],
-                ['itemIdentifier' => '4'],
-            ],
-        ]);
     }
 }

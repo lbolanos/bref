@@ -6,10 +6,7 @@ use Exception;
 
 final class InvalidLambdaEvent extends Exception
 {
-    /**
-     * @param mixed $event
-     */
-    public function __construct(string $expectedEventType, $event)
+    public function __construct(string $expectedEventType, mixed $event)
     {
         if (! $event) {
             $eventData = 'null';
@@ -17,6 +14,6 @@ final class InvalidLambdaEvent extends Exception
             $eventData = print_r($event, true);
         }
 
-        parent::__construct("This handler expected to be invoked with a $expectedEventType event. Instead, the handler was invoked with invalid event data: $eventData");
+        parent::__construct("This handler expected to be invoked with a $expectedEventType event (check that you are using the correct Bref runtime: https://bref.sh/docs/runtimes/#bref-runtimes).\nInstead, the handler was invoked with invalid event data: $eventData");
     }
 }

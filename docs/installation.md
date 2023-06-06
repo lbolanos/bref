@@ -28,7 +28,7 @@ Bref relies on the [Serverless framework](https://serverless.com/) and AWS acces
     npm install -g serverless
     ```
   
-    _Bref is compatible with Serverless Framework v3 (current version) and the older v2._
+    _Bref is compatible with Serverless Framework v3 (current version)._
 
 - [create AWS access keys](/docs/installation/aws-keys.md)
 
@@ -48,9 +48,9 @@ Install Bref in your project using [Composer](https://getcomposer.org/):
 composer require bref/bref
 ```
 
-> Make sure that the version of Bref that was installed is 1.0 or greater.
+> Make sure that the version of Bref that was installed is 2.0 or greater.
 
-> To run the latest version of Bref you must have PHP 7.3 or greater! If you are using PHP 7.2 or less, an outdated version of Bref will be installed instead.
+> To run the latest version of Bref you must have PHP 8.0 or greater! If you are using PHP 7.4 or less, an outdated version of Bref will be installed instead.
 
 The `bref` command line tool can now be used by running `vendor/bin/bref` in your project.
 

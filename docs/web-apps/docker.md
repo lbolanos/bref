@@ -6,12 +6,13 @@ previous:
     title: Local development for web apps
 ---
 
-AWS Lambda support running a Docker Container as a handler
-for your function. This alternative **is a last resort** when:
+AWS Lambda supports running a Docker image, instead of running your application in the default Linux environment. We recommend Docker **as a last resort**, as it is less practical and usually comes with slightly worse cold starts. Yes, Docker is great and probably sounds familiar, but is often not worth it on Lambda.
 
-- Your Lambda Function is larger than 250MB when unzipped
-- You need more than 5 extensions
-- You need resources locally installed (e.g. mysqldump)
+You should consider deploying using Docker when:
+
+- Your Lambda Function is [larger than 250MB when unzipped](../environment/storage.md)
+- You reached the limit of 5 Lambda layers (e.g. for extra PHP extensions)
+- You need resources installed locally (e.g. mysqldump)
 
 > Note: this documentation page assumes that you have read about [web apps on Lambda](../runtimes/http.md) first.
 
@@ -22,7 +23,7 @@ out-of-the-box base images that are package for the Lambda environment.
 Here is an example of a Docker image
 
 ```Dockerfile
-FROM bref/php-80-fpm
+FROM bref/php-80-fpm:2
 
 COPY . /var/task
 
@@ -40,12 +41,10 @@ You may also enable PHP extensions by pulling them from
 [Bref Extensions](https://github.com/brefphp/extra-php-extensions)
 
 ```Dockerfile
-FROM bref/php-80-fpm
+FROM bref/php-80-fpm:2
 
-COPY --from=bref/extra-redis-php-80:0.10 /opt/bref-extra /opt/bref-extra
-
-COPY --from=bref/extra-gmp-php-80:0.10 /opt/bref-extra /opt/bref-extra
-COPY --from=bref/extra-gmp-php-80:0.10 /opt/bref/ /opt/bref
+COPY --from=bref/extra-redis-php-80:1 /opt /opt
+COPY --from=bref/extra-gmp-php-80:1 /opt /opt
 
 COPY . /var/task
 
@@ -74,7 +73,7 @@ functions:
             - httpApi: '*'
 ```
 
-Instead of having a `handler` and a `layer`, we'll declare an
+Instead of having a `handler` and a `runtime`, we'll declare an
 `image`. In the `provider` block, we'll declare Docker images
 that we want to build and deploy.
 
